@@ -1,0 +1,47 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2017
+
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cavern3-Beta - Standalone Plugin", "Cavern3-Beta_StandalonePlugin.vcxproj", "{B529134D-BFDE-A151-4B5D-B0B0DB170162}"
+	ProjectSection(ProjectDependencies) = postProject
+		{13FECF05-4F97-2076-046D-20CAECAF29B2} = {13FECF05-4F97-2076-046D-20CAECAF29B2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cavern3-Beta - VST3", "Cavern3-Beta_VST3.vcxproj", "{8C6401AD-0D49-613C-6408-0727F7807C73}"
+	ProjectSection(ProjectDependencies) = postProject
+		{13FECF05-4F97-2076-046D-20CAECAF29B2} = {13FECF05-4F97-2076-046D-20CAECAF29B2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cavern3-Beta - Unity Plugin", "Cavern3-Beta_UnityPlugin.vcxproj", "{60C82343-0951-81D4-FA61-90908DFD1135}"
+	ProjectSection(ProjectDependencies) = postProject
+		{13FECF05-4F97-2076-046D-20CAECAF29B2} = {13FECF05-4F97-2076-046D-20CAECAF29B2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cavern3-Beta - Shared Code", "Cavern3-Beta_SharedCode.vcxproj", "{13FECF05-4F97-2076-046D-20CAECAF29B2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C6401AD-0D49-613C-6408-0727F7807C73}.Debug|x64.ActiveCfg = Debug|x64
+		{8C6401AD-0D49-613C-6408-0727F7807C73}.Debug|x64.Build.0 = Debug|x64
+		{8C6401AD-0D49-613C-6408-0727F7807C73}.Release|x64.ActiveCfg = Release|x64
+		{8C6401AD-0D49-613C-6408-0727F7807C73}.Release|x64.Build.0 = Release|x64
+		{B529134D-BFDE-A151-4B5D-B0B0DB170162}.Debug|x64.ActiveCfg = Debug|x64
+		{B529134D-BFDE-A151-4B5D-B0B0DB170162}.Debug|x64.Build.0 = Debug|x64
+		{B529134D-BFDE-A151-4B5D-B0B0DB170162}.Release|x64.ActiveCfg = Release|x64
+		{B529134D-BFDE-A151-4B5D-B0B0DB170162}.Release|x64.Build.0 = Release|x64
+		{60C82343-0951-81D4-FA61-90908DFD1135}.Debug|x64.ActiveCfg = Debug|x64
+		{60C82343-0951-81D4-FA61-90908DFD1135}.Debug|x64.Build.0 = Debug|x64
+		{60C82343-0951-81D4-FA61-90908DFD1135}.Release|x64.ActiveCfg = Release|x64
+		{60C82343-0951-81D4-FA61-90908DFD1135}.Release|x64.Build.0 = Release|x64
+		{13FECF05-4F97-2076-046D-20CAECAF29B2}.Debug|x64.ActiveCfg = Debug|x64
+		{13FECF05-4F97-2076-046D-20CAECAF29B2}.Debug|x64.Build.0 = Debug|x64
+		{13FECF05-4F97-2076-046D-20CAECAF29B2}.Release|x64.ActiveCfg = Release|x64
+		{13FECF05-4F97-2076-046D-20CAECAF29B2}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
