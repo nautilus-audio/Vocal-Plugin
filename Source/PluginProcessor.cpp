@@ -61,16 +61,6 @@ SimpleDelayAudioProcessor::SimpleDelayAudioProcessor()
     using feedbackValue = AudioProcessorValueTreeState::Parameter;
     tree.createAndAddParameter(std::make_unique<feedbackValue> ("feedbackValue", "FeedbackValue", String(), NormalisableRange<float>(0.1f, 0.8f), 0.1f, nullptr, nullptr));
     
-    //initialize reverb parameters
-    using dryWet = AudioProcessorValueTreeState::Parameter;
-    tree.createAndAddParameter(std::make_unique<dryWet> ("dryWet", "DryWet", String(), NormalisableRange<float> (0.0f, 1.0f), 0.5f, nullptr, nullptr));
-    using damping = AudioProcessorValueTreeState::Parameter;
-    tree.createAndAddParameter(std::make_unique<damping> ("damping", "Damping", String(), NormalisableRange<float> (0.0f, 1.0f), 0.1f, nullptr, nullptr));
-    using roomSize = AudioProcessorValueTreeState::Parameter;
-    tree.createAndAddParameter(std::make_unique<roomSize> ("roomSize", "RoomSize", String(), NormalisableRange<float> (0.0f, 1.0f), 0.4f, nullptr, nullptr));
-    using roomWidth = AudioProcessorValueTreeState::Parameter;
-    tree.createAndAddParameter(std::make_unique<roomWidth> ("roomWidth", "RoomWidth", String(), NormalisableRange<float> (0.0f, 1.0f), 0.4f, nullptr, nullptr));
-    
     //Set Plugin State
     tree.state = ValueTree(Identifier("DelayState"));
     //params.state = ValueTree(Identifier("ReverbState"));
