@@ -4,14 +4,14 @@ A Variable-Delay Line Stereo Reverb Plugin made with the JUCE Framework, to re-c
 ## Functionality
 Features 6 controls, a toggle and one menu:
 
-Delay:
+### Delay:
 
 Delay Time in ms, Feedback gain for delay
 
 BPM Sync Toggle, Menu of subdivisions
 
 
-Reverb:
+### Reverb:
 
 Dry/Wet, Room Size, Damping, Room Width
 
