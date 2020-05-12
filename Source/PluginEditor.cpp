@@ -19,23 +19,17 @@ SimpleDelayAudioProcessorEditor::SimpleDelayAudioProcessorEditor (SimpleDelayAud
     // editor's size to whatever you need it to be.
     setSize (600, 400);
     
-<<<<<<< HEAD
     //Delay Dial
     AudioPlayHead::CurrentPositionInfo playHead;
     
-//    auto BPM = playHead.bpm;
-    auto BPM = 120;
+    auto BPM = playHead.bpm;
+//    auto BPM = 120;
     auto maxDelay = 60000 / BPM * 4;
-    
+
+    //Delay Dial
     numDelayDial.setSliderStyle(Slider::RotaryVerticalDrag);
     numDelayDial.setRange(20, maxDelay, 1);
     numDelayDial.setValue(20.0);
-=======
-    //Delay Dial
-    numDelayDial.setSliderStyle(Slider::RotaryVerticalDrag);
-    numDelayDial.setRange(20, 1000, 1);
-    numDelayDial.setValue(500.0);
->>>>>>> origin/master
     numDelayDial.setNumDecimalPlacesToDisplay(1);
     numDelayDial.setTextBoxStyle(Slider::TextBoxBelow, false, 100, 20);
     numDelayDial.setTextValueSuffix(" ms");
@@ -108,7 +102,6 @@ SimpleDelayAudioProcessorEditor::SimpleDelayAudioProcessorEditor (SimpleDelayAud
     //Room Width Label
     addAndMakeVisible(roomWidthLabel);
     roomWidthLabel.setText("Room Width", dontSendNotification);
-<<<<<<< HEAD
     roomWidthLabel.setJustificationType(Justification::centred);
     
     // BPM Toggle
@@ -122,11 +115,7 @@ SimpleDelayAudioProcessorEditor::SimpleDelayAudioProcessorEditor (SimpleDelayAud
     delayMenu.setJustificationType(Justification::centred);
 
     comboBoxAttachment = new AudioProcessorValueTreeState::ComboBoxAttachment (valueStateTree, "delayChoice", delayMenu);
-=======
-    roomWidthLabel.setJustificationType(Justification::centred);
->>>>>>> origin/master
 
-    
 }
 
 SimpleDelayAudioProcessorEditor::~SimpleDelayAudioProcessorEditor()
@@ -173,14 +162,8 @@ void SimpleDelayAudioProcessorEditor::resized()
     dampingLabel.setBounds(sliderWidth * 4, sliderHeight, labelWidth, labelHeight);
     
     roomWidthSlider.setBounds(sliderWidth * 5, 0, sliderWidth, sliderHeight);
-<<<<<<< HEAD
     roomWidthLabel.setBounds(sliderWidth * 5, sliderHeight, labelWidth, labelHeight);
     
     delayMenu.setBounds(sliderWidth * 2, 80, 120, 40);
     BPM_Toggle.setBounds((sliderWidth * 2) + 120, 80, 100, 40);
-
-=======
-    roomWidthLabel.setBounds(sliderWidth * 5, sliderHeight, labelWidth, labelHeight);
-\
->>>>>>> origin/master
 }

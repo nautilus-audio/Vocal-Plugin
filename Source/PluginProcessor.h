@@ -55,12 +55,8 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-<<<<<<< HEAD
-    void fillDelayBuffer (int channel, const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData);
     float getDelayFromBPM(int index);
-=======
     void fillDelayBuffer (int channel, const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData);
->>>>>>> origin/master
     void getFromDelayBuffer (AudioBuffer<float>& buffer, int channel, const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData);
     void feedbackDelay (int channel, const int bufferLength, const int delayBufferLength, float* dryBuffer);
     
@@ -72,7 +68,6 @@ private:
     AudioBuffer<float> mDelayBuffer;
     int mWritePosition {0};
     int mSampleRate {44100};
-<<<<<<< HEAD
     float lastDelayTime;
     
     //AudioProcessorValueTreeState::Parameter param; 
@@ -90,12 +85,6 @@ private:
     SmoothedValue<float, ValueSmoothingTypes::Linear> delayMS {0.00001f};
     SmoothedValue<float, ValueSmoothingTypes::Linear> delayGain {0.1f};
     
-=======
-    
-    //Init Reverb, Parameters
-    Reverb cavern;
-    Reverb::Parameters cavernParameters;
->>>>>>> origin/master
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleDelayAudioProcessor)
 };

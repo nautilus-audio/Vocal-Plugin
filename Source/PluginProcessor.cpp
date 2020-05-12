@@ -21,8 +21,6 @@ SimpleDelayAudioProcessor::SimpleDelayAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-<<<<<<< HEAD
-<<<<<<< HEAD
                        ), tree(*this, nullptr)    //Add Tree
 #endif
 {
@@ -56,17 +54,8 @@ SimpleDelayAudioProcessor::SimpleDelayAudioProcessor()
     
     using bpmToggle = AudioProcessorValueTreeState::Parameter;
     tree.createAndAddParameter(std::make_unique<bpmToggle> ("bpmToggle", "BpmToggle", String(), NormalisableRange<float> (0.0f, 1.0f), 0.0f, nullptr, nullptr));
-=======
-                       ), tree(*this, nullptr)  //Add Trees
-#endif
-{
-    //initialize delay parameters
-=======
-                       ), tree(*this, nullptr)  //Add Trees
-#endif
-{
-    //initialize delay parameters
->>>>>>> origin/master
+
+    // initialize delay parameters
     using delayValue = AudioProcessorValueTreeState::Parameter;
     tree.createAndAddParameter(std::make_unique<delayValue> ("delayValue", "DelayValue", String(), NormalisableRange<float>(20.0f, 1000.0f), 500.0f, nullptr, nullptr));
     using feedbackValue = AudioProcessorValueTreeState::Parameter;
@@ -81,10 +70,6 @@ SimpleDelayAudioProcessor::SimpleDelayAudioProcessor()
     tree.createAndAddParameter(std::make_unique<roomSize> ("roomSize", "RoomSize", String(), NormalisableRange<float> (0.0f, 1.0f), 0.4f, nullptr, nullptr));
     using roomWidth = AudioProcessorValueTreeState::Parameter;
     tree.createAndAddParameter(std::make_unique<roomWidth> ("roomWidth", "RoomWidth", String(), NormalisableRange<float> (0.0f, 1.0f), 0.4f, nullptr, nullptr));
-<<<<<<< HEAD
->>>>>>> origin/master
-=======
->>>>>>> origin/master
     
     //Set Plugin State
     tree.state = ValueTree(Identifier("DelayState"));
@@ -168,25 +153,11 @@ void SimpleDelayAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     mSampleRate = sampleRate;
     
     //Update Delay Buffer
-<<<<<<< HEAD
-<<<<<<< HEAD
     mDelayBuffer.setSize(numInputChannels, delayBufferSize);
     
     //Set sample rate for reverb
     cavern.setSampleRate(sampleRate);
     lastDelayTime = 0.01;
-    
-=======
-=======
->>>>>>> origin/master
-    mDelayBuffer.setSize(numInputChannels, delayBufferSize);
-    
-    //Set sample rate for reverb
-    cavern.setSampleRate(sampleRate);
-<<<<<<< HEAD
->>>>>>> origin/master
-=======
->>>>>>> origin/master
 }
 
 void SimpleDelayAudioProcessor::releaseResources()
@@ -223,15 +194,8 @@ void SimpleDelayAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
 {
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
-<<<<<<< HEAD
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     delayMS.setCurrentAndTargetValue(0.0);
-=======
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-<<<<<<< HEAD
->>>>>>> origin/master
-=======
->>>>>>> origin/master
 
     //Get current values for reverb parameters
     const float lastDryWet = *tree.getRawParameterValue("dryWet");
@@ -264,18 +228,10 @@ void SimpleDelayAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     
     //Get Buffer Lengths
     const int bufferLength = buffer.getNumSamples();
-<<<<<<< HEAD
-<<<<<<< HEAD
     const int delayBufferLength = mDelayBuffer.getNumSamples();
     
 //    std::cout << "Buffer Length is: " << bufferLength << std::endl;
 //    std::cout << "Delay Buffer Length is: " << delayBufferLength << std::endl;
-=======
-    const int delayBufferLength = mDelayBuffer.getNumSamples();
->>>>>>> origin/master
-=======
-    const int delayBufferLength = mDelayBuffer.getNumSamples();
->>>>>>> origin/master
     
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -311,14 +267,12 @@ void SimpleDelayAudioProcessor::fillDelayBuffer (int channel, const int bufferLe
     }
     
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 
 float SimpleDelayAudioProcessor::getDelayFromBPM(int index){
     float delayinMS = 0.0;
-//    auto BPM = playHead.bpm;
-    int BPM=120;
+    auto BPM = playHead.bpm;
+//    int BPM=120;
     
     switch (index) {
         case 0: // 1/64T
@@ -388,21 +342,6 @@ void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, 
     
     //Initialize Read Position
     const int readPosition = static_cast<int> (delayBufferLength + mWritePosition - (mSampleRate * currentDelayTime / 1000)) % delayBufferLength;
-=======
-=======
->>>>>>> origin/master
-
-void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, int channel, const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData)
-{
-    //Get delay time from ValueTree
-    int delayTime = *tree.getRawParameterValue("delayValue");
-    
-    //Initialize Read Position
-    const int readPosition = static_cast<int> (delayBufferLength + mWritePosition - (mSampleRate * delayTime / 1000)) % delayBufferLength;
-<<<<<<< HEAD
->>>>>>> origin/master
-=======
->>>>>>> origin/master
     
     //Read data from Main Buffer to Delay Buffer
     if (delayBufferLength > bufferLength + readPosition)
@@ -422,43 +361,19 @@ void SimpleDelayAudioProcessor::feedbackDelay (int channel, const int bufferLeng
 {
     //Get feedback value from ValueTree
     const float feedbackGain = *tree.getRawParameterValue("feedbackValue");
-<<<<<<< HEAD
-<<<<<<< HEAD
     delayGain.setCurrentAndTargetValue(feedbackGain);
     //Copy Delayed Signal to Main Buffer
     if (delayBufferLength > bufferLength + mWritePosition)
     {
         mDelayBuffer.addFromWithRamp(channel, mWritePosition, dryBuffer, bufferLength, delayGain.getNextValue(), delayGain.getNextValue());
-=======
-=======
->>>>>>> origin/master
-    
-    //Copy Delayed Signal to Main Buffer
-    if (delayBufferLength > bufferLength + mWritePosition)
-    {
-        mDelayBuffer.addFromWithRamp(channel, mWritePosition, dryBuffer, bufferLength, feedbackGain, feedbackGain);
-<<<<<<< HEAD
->>>>>>> origin/master
-=======
->>>>>>> origin/master
     }
     
     else
     {
         const int bufferRemaining = delayBufferLength - mWritePosition;
         
-<<<<<<< HEAD
-<<<<<<< HEAD
         mDelayBuffer.addFromWithRamp(channel, bufferRemaining, dryBuffer, bufferRemaining, delayGain.getNextValue(), delayGain.getNextValue());
         mDelayBuffer.addFromWithRamp(channel, 0, dryBuffer, bufferLength - bufferRemaining, delayGain.getNextValue(), delayGain.getNextValue());
-=======
-        mDelayBuffer.addFromWithRamp(channel, bufferRemaining, dryBuffer, bufferRemaining, feedbackGain, feedbackGain);
-        mDelayBuffer.addFromWithRamp(channel, 0, dryBuffer, bufferLength - bufferRemaining, feedbackGain, feedbackGain);
->>>>>>> origin/master
-=======
-        mDelayBuffer.addFromWithRamp(channel, bufferRemaining, dryBuffer, bufferRemaining, feedbackGain, feedbackGain);
-        mDelayBuffer.addFromWithRamp(channel, 0, dryBuffer, bufferLength - bufferRemaining, feedbackGain, feedbackGain);
->>>>>>> origin/master
     }
 }
 
