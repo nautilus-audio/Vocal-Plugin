@@ -79,8 +79,6 @@ private:
     //Delay by BPM Menu
     AudioPlayHead::CurrentPositionInfo playHead;
     
-    bool delayByBPM = false;
-    
     //Value Smoothing
     SmoothedValue<float, ValueSmoothingTypes::Linear> delayMS {0.00001f};
     SmoothedValue<float, ValueSmoothingTypes::Linear> delayGain {0.1f};

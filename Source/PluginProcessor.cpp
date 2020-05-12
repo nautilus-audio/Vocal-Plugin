@@ -271,6 +271,7 @@ void SimpleDelayAudioProcessor::fillDelayBuffer (int channel, const int bufferLe
 
 float SimpleDelayAudioProcessor::getDelayFromBPM(int index){
     float delayinMS = 0.0;
+    int base, factor;
     auto BPM = playHead.bpm;
 //    int BPM=120;
     
@@ -281,26 +282,33 @@ float SimpleDelayAudioProcessor::getDelayFromBPM(int index){
             delayinMS = 60000 / BPM / 16;
             break;
         case 2: // 1/32T
+            delayinMS = 60000 / BPM / 12;
             break;
         case 3: // 1/32
             delayinMS = 60000 / BPM / 8;
             break;
         case 4: // 1/16T
+            delayinMS = 60000 / BPM / 6;
             break;
         case 5: // 1/16
             delayinMS = 60000 / BPM / 4;
             break;
         case 6: // 1/8T
+            delayinMS = 60000 / BPM / 3;
             break;
         case 7: // 1/8
             delayinMS = 60000 / BPM / 2;
             break;
         case 8: // 1/4T
+            delayinMS = 60000 / BPM / 1.5;
             break;
         case 9: // 1/4
             delayinMS = 60000 / BPM;
             break;
         case 10:// 1/2T
+            base = 60000 / BPM;
+            factor = base / 3;
+            delayinMS = factor + base;
             break;
         case 11:// 1/2
             delayinMS = 60000 / BPM * 2;
@@ -331,7 +339,7 @@ void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, 
     else{
         currentDelayTime = *tree.getRawParameterValue("delayValue");
     }
-    std::cout << currentDelayTime << std::endl;
+//    std::cout << currentDelayTime << std::endl;
     
     if (lastDelayTime != currentDelayTime){ //if you turn the knob
         delayMS.setTargetValue(currentDelayTime);
