@@ -10,6 +10,7 @@ Delay Time in ms, Feedback gain for delay
 
 BPM Sync Toggle, Menu of subdivisions
 
+
 Reverb:
 
 Dry/Wet, Room Size, Damping, Room Width
