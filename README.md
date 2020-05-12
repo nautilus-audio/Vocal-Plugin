@@ -2,11 +2,13 @@
 A Variable-Delay Line Stereo Reverb Plugin made with the JUCE Framework, to re-create the "reverbsc" opcode in Csound.  This is the third installation in the Cavern plugin series.
 
 ## Functionality
-Features 6 controls:
+Features 6 controls, a toggle and one menu:
 
 Delay:
 
 Delay Time in ms, Feedback gain for delay
+
+BPM Sync Toggle, Menu of subdivisions
 
 Reverb:
 
