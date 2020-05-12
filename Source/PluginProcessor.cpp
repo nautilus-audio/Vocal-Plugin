@@ -145,6 +145,11 @@ void SimpleDelayAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     //Update Delay Buffer
     mDelayBuffer.setSize(numInputChannels, delayBufferSize);
     
+    delayMS.reset(sampleRate, 0.0001);
+    delayGain.reset(sampleRate, 0.0001);
+    delayMS.setCurrentAndTargetValue(currentDelayTime);
+    delayGain.setCurrentAndTargetValue(currentFeedbackGain);
+    
     //Set sample rate for reverb
     cavern.setSampleRate(sampleRate);
     lastDelayTime = 0.01;
@@ -185,7 +190,6 @@ void SimpleDelayAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-    delayMS.setCurrentAndTargetValue(0.0);
 
     //Get current values for reverb parameters
     const float lastDryWet = *tree.getRawParameterValue("dryWet");
@@ -317,7 +321,6 @@ float SimpleDelayAudioProcessor::getDelayFromBPM(int index){
 void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, int channel, const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData)
 {
     //Get delay time from ValueTree
-    float currentDelayTime;
     float toggle = *tree.getRawParameterValue("bpmToggle");
     
     if (toggle==1){
@@ -329,14 +332,15 @@ void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, 
     else{
         currentDelayTime = *tree.getRawParameterValue("delayValue");
     }
-//    std::cout << currentDelayTime << std::endl;
     
     if (lastDelayTime != currentDelayTime){ //if you turn the knob
         delayMS.setTargetValue(currentDelayTime);
+        std::cout << delayMS.getCurrentValue() << std::endl;
         currentDelayTime = delayMS.getNextValue();
         lastDelayTime = currentDelayTime;
-        delayMS.reset(0.01);
     }
+    
+    std::cout << "Smoothing: " << delayMS.isSmoothing() << std::endl;
     
     //Initialize Read Position
     const int readPosition = static_cast<int> (delayBufferLength + mWritePosition - (mSampleRate * currentDelayTime / 1000)) % delayBufferLength;
@@ -358,8 +362,14 @@ void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, 
 void SimpleDelayAudioProcessor::feedbackDelay (int channel, const int bufferLength, const int delayBufferLength, float* dryBuffer)
 {
     //Get feedback value from ValueTree
-    const float feedbackGain = *tree.getRawParameterValue("feedbackValue");
-    delayGain.setCurrentAndTargetValue(feedbackGain);
+    currentFeedbackGain = *tree.getRawParameterValue("feedbackValue");
+    
+    if (lastFeedbackGain != currentFeedbackGain){ //if you turn the knob
+        delayGain.setTargetValue(currentFeedbackGain);
+        currentFeedbackGain = delayGain.getNextValue();
+        lastFeedbackGain = currentFeedbackGain;
+    }
+    
     //Copy Delayed Signal to Main Buffer
     if (delayBufferLength > bufferLength + mWritePosition)
     {

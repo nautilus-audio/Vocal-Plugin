@@ -68,7 +68,10 @@ private:
     AudioBuffer<float> mDelayBuffer;
     int mWritePosition {0};
     int mSampleRate {44100};
-    float lastDelayTime;
+    float currentDelayTime = 0.0;
+    float lastDelayTime = 0.0;
+    float currentFeedbackGain = 0.0;
+    float lastFeedbackGain = 0.0;
     
     //AudioProcessorValueTreeState::Parameter param; 
     
@@ -80,8 +83,8 @@ private:
     AudioPlayHead::CurrentPositionInfo playHead;
     
     //Value Smoothing
-    SmoothedValue<float, ValueSmoothingTypes::Linear> delayMS {0.00001f};
-    SmoothedValue<float, ValueSmoothingTypes::Linear> delayGain {0.1f};
+    SmoothedValue<float, ValueSmoothingTypes::Linear> delayMS {0.001f};
+    SmoothedValue<float, ValueSmoothingTypes::Linear> delayGain {0.001f};
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleDelayAudioProcessor)

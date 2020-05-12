@@ -28,7 +28,7 @@ SimpleDelayAudioProcessorEditor::SimpleDelayAudioProcessorEditor (SimpleDelayAud
 
     //Delay Dial
     numDelayDial.setSliderStyle(Slider::RotaryVerticalDrag);
-    numDelayDial.setRange(20, maxDelay, 1);
+    numDelayDial.setRange(0, maxDelay, 1);
     numDelayDial.setValue(20.0);
     numDelayDial.setNumDecimalPlacesToDisplay(1);
     numDelayDial.setTextBoxStyle(Slider::TextBoxBelow, false, 100, 20);
