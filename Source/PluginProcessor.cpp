@@ -224,9 +224,6 @@ void SimpleDelayAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     const int bufferLength = buffer.getNumSamples();
     const int delayBufferLength = mDelayBuffer.getNumSamples();
     
-//    std::cout << "Buffer Length is: " << bufferLength << std::endl;
-//    std::cout << "Delay Buffer Length is: " << delayBufferLength << std::endl;
-    
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         //Read Pointers
