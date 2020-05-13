@@ -337,7 +337,7 @@ void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, 
         lastDelayTime = currentDelayTime;
     }
     
-    std::cout << "Smoothing: " << delayMS.isSmoothing() << std::endl;
+    //std::cout << "Smoothing: " << delayMS.isSmoothing() << std::endl;
     
     //Initialize Read Position
     const int readPosition = static_cast<int> (delayBufferLength + mWritePosition - (mSampleRate * currentDelayTime / 1000)) % delayBufferLength;
@@ -361,6 +361,8 @@ void SimpleDelayAudioProcessor::feedbackDelay (int channel, const int bufferLeng
     //Get feedback value from ValueTree
     currentFeedbackGain = *tree.getRawParameterValue("feedbackValue");
     
+    std::cout << "Smoothing: " << delayGain.isSmoothing() << std::endl;
+    
     if (lastFeedbackGain != currentFeedbackGain){ //if you turn the knob
         delayGain.setTargetValue(currentFeedbackGain);
         currentFeedbackGain = delayGain.getNextValue();
@@ -370,15 +372,15 @@ void SimpleDelayAudioProcessor::feedbackDelay (int channel, const int bufferLeng
     //Copy Delayed Signal to Main Buffer
     if (delayBufferLength > bufferLength + mWritePosition)
     {
-        mDelayBuffer.addFromWithRamp(channel, mWritePosition, dryBuffer, bufferLength, delayGain.getNextValue(), delayGain.getNextValue());
+        mDelayBuffer.addFromWithRamp(channel, mWritePosition, dryBuffer, bufferLength, currentFeedbackGain, currentFeedbackGain);
     }
     
     else
     {
         const int bufferRemaining = delayBufferLength - mWritePosition;
         
-        mDelayBuffer.addFromWithRamp(channel, bufferRemaining, dryBuffer, bufferRemaining, delayGain.getNextValue(), delayGain.getNextValue());
-        mDelayBuffer.addFromWithRamp(channel, 0, dryBuffer, bufferLength - bufferRemaining, delayGain.getNextValue(), delayGain.getNextValue());
+        mDelayBuffer.addFromWithRamp(channel, bufferRemaining, dryBuffer, bufferRemaining, currentFeedbackGain, currentFeedbackGain);
+        mDelayBuffer.addFromWithRamp(channel, 0, dryBuffer, bufferLength - bufferRemaining, currentFeedbackGain, currentFeedbackGain);
     }
 }
 
