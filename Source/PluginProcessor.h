@@ -83,8 +83,8 @@ private:
     AudioPlayHead::CurrentPositionInfo playHead;
     
     //Value Smoothing
-    SmoothedValue<float, ValueSmoothingTypes::Linear> delayMS {0.001f};
-    SmoothedValue<float, ValueSmoothingTypes::Linear> delayGain {0.001f};
+    SmoothedValue<float, ValueSmoothingTypes::Linear> delayMS {0.1f};
+    SmoothedValue<float, ValueSmoothingTypes::Linear> delayGain {0.1f};
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleDelayAudioProcessor)

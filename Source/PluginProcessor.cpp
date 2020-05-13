@@ -244,7 +244,7 @@ void SimpleDelayAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
 
 void SimpleDelayAudioProcessor::fillDelayBuffer (int channel, const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData)
 {
-    const float gain = 0.3;
+    const float gain = 0.1;
     
     //Write Data From Main Buffer to Delay Buffer
     if (delayBufferLength > bufferLength + mWritePosition)
@@ -345,14 +345,14 @@ void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, 
     //Read data from Main Buffer to Delay Buffer
     if (delayBufferLength > bufferLength + readPosition)
     {
-        buffer.copyFrom(channel, 0, delayBufferData + readPosition, bufferLength);
+        buffer.addFrom(channel, 0, delayBufferData + readPosition, bufferLength);
     }
     
     else
     {
         const int bufferRemaining = delayBufferLength - readPosition;
-        buffer.copyFrom(channel, 0, delayBufferData + readPosition, bufferRemaining);
-        buffer.copyFrom(channel, bufferRemaining, delayBufferData, bufferLength - bufferRemaining);
+        buffer.addFrom(channel, 0, delayBufferData + readPosition, bufferRemaining);
+        buffer.addFrom(channel, bufferRemaining, delayBufferData, bufferLength - bufferRemaining);
     }
 }
 
