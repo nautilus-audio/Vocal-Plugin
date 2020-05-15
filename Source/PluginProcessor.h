@@ -64,14 +64,16 @@ public:
     AudioProcessorValueTreeState tree;
     
 private:
-    //Init Delay Buffer, Write Position, Sample Rate
+    //Create Wet Buffer, Init Params
     AudioBuffer<float> mDelayBuffer;
+    int readPosition {0};
     int mWritePosition {0};
     int mSampleRate {44100};
-    float currentDelayTime = 0.0;
-    float lastDelayTime = 0.0;
-    float currentFeedbackGain = 0.0;
-    float lastFeedbackGain = 0.0;
+    float currentDelayTime {0.0};
+    float lastDelayTime {0.0};
+    float delaySave {0};
+    float currentFeedbackGain {0.0};
+    float lastFeedbackGain {0.0};
     
     //AudioProcessorValueTreeState::Parameter param; 
     
@@ -79,10 +81,10 @@ private:
     Reverb cavern;
     Reverb::Parameters cavernParameters;
     
-    //Delay by BPM Menu
+    //Create Playhead for reference
     AudioPlayHead::CurrentPositionInfo playHead;
     
-    //Value Smoothing
+    //Init Value Smoothing Variables
     SmoothedValue<float, ValueSmoothingTypes::Linear> delayMS {0.1f};
     SmoothedValue<float, ValueSmoothingTypes::Linear> delayGain {0.1f};
     

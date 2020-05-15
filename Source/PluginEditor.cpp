@@ -24,7 +24,7 @@ SimpleDelayAudioProcessorEditor::SimpleDelayAudioProcessorEditor (SimpleDelayAud
     
     auto BPM = playHead.bpm;
 //    auto BPM = 120;
-    auto maxDelay = 60000 / BPM * 4;
+    auto maxDelay = 60000 / BPM * 4; // maxDelay is the delay amount of 1 bar
 
     //Delay Dial
     numDelayDial.setSliderStyle(Slider::RotaryVerticalDrag);

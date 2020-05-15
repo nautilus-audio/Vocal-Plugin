@@ -30,6 +30,7 @@ public:
 private:
     AudioProcessorValueTreeState& valueStateTree;
     
+    // Create Silders, Labels and Attachments
     Slider numDelayDial;
     Label numDelayLabel;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> numDelayValue;
