@@ -54,11 +54,13 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    void reset(double sampleRate);
     
     float getDelayFromBPM(int index);
     void fillDelayBuffer (int channel, const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData);
     void getFromDelayBuffer (AudioBuffer<float>& buffer, int channel, const int bufferLength, const int delayBufferLength, const float* bufferData, const float* delayBufferData);
     void feedbackDelay (int channel, const int bufferLength, const int delayBufferLength, float* dryBuffer);
+    void updateDelayTime();
     
     //Init Value Trees
     AudioProcessorValueTreeState tree;
@@ -68,7 +70,7 @@ private:
     AudioBuffer<float> mDelayBuffer;
     int readPosition {0};
     int mWritePosition {0};
-    int mSampleRate {44100};
+    int mSampleRate;
     float currentDelayTime {0.0};
     float lastDelayTime {0.0};
     float delaySave {0};

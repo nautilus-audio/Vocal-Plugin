@@ -19,9 +19,7 @@ SimpleDelayAudioProcessorEditor::SimpleDelayAudioProcessorEditor (SimpleDelayAud
     // editor's size to whatever you need it to be.
     setSize (600, 400);
     
-    //Delay Dial
     AudioPlayHead::CurrentPositionInfo playHead;
-    
     auto BPM = playHead.bpm;
 //    auto BPM = 120;
     auto maxDelay = 60000 / BPM * 4; // maxDelay is the delay amount of 1 bar
@@ -34,6 +32,9 @@ SimpleDelayAudioProcessorEditor::SimpleDelayAudioProcessorEditor (SimpleDelayAud
     numDelayDial.setTextBoxStyle(Slider::TextBoxBelow, false, 100, 20);
     numDelayDial.setTextValueSuffix(" ms");
     addAndMakeVisible(numDelayDial);
+    
+    // Very important. This gaurantees that the playback will adjust to the new delay value upon the end of a slider drag
+    numDelayDial.onDragEnd = [this] {processor.updateDelayTime();};
     numDelayValue = new AudioProcessorValueTreeState::SliderAttachment(valueStateTree, "delayValue", numDelayDial);
     
     //Delay Label
@@ -113,7 +114,6 @@ SimpleDelayAudioProcessorEditor::SimpleDelayAudioProcessorEditor (SimpleDelayAud
     addAndMakeVisible(delayMenu);
     delayMenu.addItemList(menuSelections, 1);
     delayMenu.setJustificationType(Justification::centred);
-
     comboBoxAttachment = new AudioProcessorValueTreeState::ComboBoxAttachment (valueStateTree, "delayChoice", delayMenu);
 
 }
