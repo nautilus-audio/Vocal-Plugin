@@ -26,12 +26,6 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
-//    void sliderValueChanged(Slider *slider) override{
-//        if (slider.stoppedDragging())
-//        {
-//            
-//        }
-//    }
 
 private:
     AudioProcessorValueTreeState& valueStateTree;

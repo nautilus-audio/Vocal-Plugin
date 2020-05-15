@@ -73,7 +73,6 @@ private:
     int mSampleRate;
     float currentDelayTime {0.0};
     float lastDelayTime {0.0};
-    float delaySave {0};
     float currentFeedbackGain {0.0};
     float lastFeedbackGain {0.0};
     
