@@ -33,7 +33,7 @@ SimpleDelayAudioProcessorEditor::SimpleDelayAudioProcessorEditor (SimpleDelayAud
     numDelayDial.setTextValueSuffix(" ms");
     addAndMakeVisible(numDelayDial);
     
-    // Very important. This gaurantees that the playback will adjust to the new delay value upon the end of a slider drag
+    // Very important. This gaurantees that the playback will adjust to the new delay value upon the end of a slider drag, elimanating value-changing artifacts.
     numDelayDial.onDragEnd = [this] {processor.updateDelayTime();};
     numDelayValue = new AudioProcessorValueTreeState::SliderAttachment(valueStateTree, "delayValue", numDelayDial);
     

@@ -25,8 +25,8 @@ SimpleDelayAudioProcessor::SimpleDelayAudioProcessor()
 #endif
 {
     //initialize delay parameters
-    auto BPM = playHead.bpm;
-//    auto BPM = 120;
+//    auto BPM = playHead.bpm;
+    auto BPM = 120;
     float maxDelay = 60000 / BPM * 4; // maxDelay is the delay amount of 1 bar
     
     //initialize reverb parameters
@@ -262,7 +262,7 @@ float SimpleDelayAudioProcessor::getDelayFromBPM(int index){
     auto BPM = playHead.bpm;
 //    int BPM=120;
     
-    // Calculate Delay from BPM
+    // Calculate Delay from BPM, based upon 60,000 ms / BPM, which gives us the delay amount in 1 beat after receiving the subdivision from our user-set menu index.
     switch (index) {
         case 0: // 1/64T
             break;
@@ -318,19 +318,18 @@ void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, 
     float toggle = *tree.getRawParameterValue("bpmToggle");
     
     if (toggle==1){
-        // Retrieve delay value from subdivision, relay to delay Knob
+        // Retrieve delay value from subdivision, relay to delay Knob for visual response
         int subdivision = *tree.getRawParameterValue("delayChoice");
         currentDelayTime = getDelayFromBPM(subdivision);
         Value delayMSKnob = tree.getParameterAsValue("delayValue");
         delayMSKnob.setValue(currentDelayTime);
     }
     
-    if (lastDelayTime != currentDelayTime){ //if you turn the knob
+    if (lastDelayTime != currentDelayTime){ //Apply Value Smoothing
         delayMS.setTargetValue(currentDelayTime);
         currentDelayTime = delayMS.getNextValue();
         lastDelayTime = currentDelayTime;
     }
-    //std::cout << "Smoothing: " << delayMS.isSmoothing() << std::endl;
     
     //Initialize Read Position
     readPosition = static_cast<int> (delayBufferLength + mWritePosition - (mSampleRate * currentDelayTime / 1000)) % delayBufferLength;
@@ -347,14 +346,13 @@ void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, 
         buffer.addFrom(channel, 0, delayBufferData + readPosition, bufferRemaining);
         buffer.addFrom(channel, bufferRemaining, delayBufferData, bufferLength - bufferRemaining);
     }
+    
 }
 
 void SimpleDelayAudioProcessor::feedbackDelay (int channel, const int bufferLength, const int delayBufferLength, float* dryBuffer)
 {
     //Get feedback value from ValueTree
     currentFeedbackGain = *tree.getRawParameterValue("feedbackValue");
-    
-//    std::cout << "Smoothing: " << delayGain.isSmoothing() << std::endl;
     
     if (lastFeedbackGain != currentFeedbackGain){ //if you turn the knob
         delayGain.setTargetValue(currentFeedbackGain);
@@ -363,8 +361,6 @@ void SimpleDelayAudioProcessor::feedbackDelay (int channel, const int bufferLeng
     }
     
     //Copy Delayed Signal to Main Buffer, using addFrom as we want both the dry and wet signals
-//    if(delaySave == currentDelayTime)
-//    {
     if (delayBufferLength > bufferLength + mWritePosition)
     {
         mDelayBuffer.addFromWithRamp(channel, mWritePosition, dryBuffer, bufferLength, currentFeedbackGain, currentFeedbackGain);
@@ -378,8 +374,6 @@ void SimpleDelayAudioProcessor::feedbackDelay (int channel, const int bufferLeng
         mDelayBuffer.addFromWithRamp(channel, bufferRemaining, dryBuffer, bufferRemaining, currentFeedbackGain, currentFeedbackGain);
         mDelayBuffer.addFromWithRamp(channel, 0, dryBuffer, bufferLength - bufferRemaining, currentFeedbackGain, currentFeedbackGain);
     }
-//    }
-//    delaySave = currentDelayTime;
 }
 
 void SimpleDelayAudioProcessor::updateDelayTime()
