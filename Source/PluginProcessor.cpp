@@ -24,7 +24,6 @@ SimpleDelayAudioProcessor::SimpleDelayAudioProcessor()
                        ), tree(*this, nullptr)    //Add Tree
 #endif
 {
-    //initialize delay parameters
 //    auto BPM = playHead.bpm;
     auto BPM = 120;
     float maxDelay = 60000 / BPM * 4; // maxDelay is the delay amount of 1 bar
@@ -138,6 +137,7 @@ void SimpleDelayAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     mDelayBuffer.setSize(numInputChannels, delayBufferSize);
     mSampleRate = sampleRate;
     
+    // Set initial values for smoothing parameters
     delayMS.setCurrentAndTargetValue(currentDelayTime);
     delayGain.setCurrentAndTargetValue(currentFeedbackGain);
     
@@ -197,7 +197,7 @@ void SimpleDelayAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    //Find number of channels
+    //Find min number of channels
     const auto numChannels = jmin(totalNumInputChannels, totalNumOutputChannels);
     
     //Update Parameters, Merge Dry/Wet Levels
@@ -220,6 +220,7 @@ void SimpleDelayAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     const int bufferLength = buffer.getNumSamples();
     const int delayBufferLength = mDelayBuffer.getNumSamples();
     
+    // Iterate DSP over number of input channels
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         //Read Pointers
@@ -242,12 +243,14 @@ void SimpleDelayAudioProcessor::fillDelayBuffer (int channel, const int bufferLe
 {
     const float gain = 0.0;
     
-    //Write Data From Main Buffer to Delay Buffer
+    // Write Data From Main Buffer to Delay Buffer if the delay buffer length is greater than the dry buffer length plus the write position (until delay buffer samples are exhausted).
     if (delayBufferLength > bufferLength + mWritePosition)
     {
         mDelayBuffer.copyFromWithRamp(channel, mWritePosition, bufferData, bufferLength, gain, gain);
     }
-    else {
+    else
+    {
+        // wrap remaining buffer samples around into next iteration
         const int bufferRemaining = delayBufferLength - mWritePosition;
         mDelayBuffer.copyFromWithRamp(channel, mWritePosition, bufferData, bufferRemaining, gain, gain);
         mDelayBuffer.copyFromWithRamp(channel, 0, bufferData, bufferLength - bufferRemaining, gain, gain);
@@ -325,16 +328,17 @@ void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, 
         delayMSKnob.setValue(currentDelayTime);
     }
     
-    if (lastDelayTime != currentDelayTime){ //Apply Value Smoothing
+    if (lastDelayTime != currentDelayTime){
+        // Apply Value Smoothing when knob is turned
         delayMS.setTargetValue(currentDelayTime);
         currentDelayTime = delayMS.getNextValue();
         lastDelayTime = currentDelayTime;
     }
     
-    //Initialize Read Position
+    // Calculate Read Position (sample) using delay time in ms
     readPosition = static_cast<int> (delayBufferLength + mWritePosition - (mSampleRate * currentDelayTime / 1000)) % delayBufferLength;
     
-    //Read data from Main Buffer to Delay Buffer
+    // Read data from Main Buffer to Delay Buffer if the delay buffer length is greater than the dry buffer length plus the read position (until delay buffer samples are exhausted).
     if (delayBufferLength > bufferLength + readPosition)
     {
         buffer.addFrom(channel, 0, delayBufferData + readPosition, bufferLength);
@@ -342,6 +346,7 @@ void SimpleDelayAudioProcessor::getFromDelayBuffer (AudioBuffer<float>& buffer, 
     
     else
     {
+        // wrap remaining buffer samples around into next iteration
         const int bufferRemaining = delayBufferLength - readPosition;
         buffer.addFrom(channel, 0, delayBufferData + readPosition, bufferRemaining);
         buffer.addFrom(channel, bufferRemaining, delayBufferData, bufferLength - bufferRemaining);
@@ -354,13 +359,14 @@ void SimpleDelayAudioProcessor::feedbackDelay (int channel, const int bufferLeng
     //Get feedback value from ValueTree
     currentFeedbackGain = *tree.getRawParameterValue("feedbackValue");
     
-    if (lastFeedbackGain != currentFeedbackGain){ //if you turn the knob
+    if (lastFeedbackGain != currentFeedbackGain){
+        // Apply Value Smoothing when knob is turned
         delayGain.setTargetValue(currentFeedbackGain);
         currentFeedbackGain = delayGain.getNextValue();
         lastFeedbackGain = currentFeedbackGain;
     }
     
-    //Copy Delayed Signal to Main Buffer, using addFrom as we want both the dry and wet signals
+    // Copy Delayed Signal to Main Buffer (using addFrom as we want both the dry and wet signals)  if the delay buffer length is greater than the dry buffer length plus the write position (until delay buffer samples are exhausted).
     if (delayBufferLength > bufferLength + mWritePosition)
     {
         mDelayBuffer.addFromWithRamp(channel, mWritePosition, dryBuffer, bufferLength, currentFeedbackGain, currentFeedbackGain);
