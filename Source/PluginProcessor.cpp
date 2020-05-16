@@ -24,8 +24,8 @@ SimpleDelayAudioProcessor::SimpleDelayAudioProcessor()
                        ), tree(*this, nullptr)    //Add Tree
 #endif
 {
-//    auto BPM = playHead.bpm;
-    auto BPM = 120;
+    auto BPM = playHead.bpm;
+//    auto BPM = 120;
     float maxDelay = 60000 / BPM * 4; // maxDelay is the delay amount of 1 bar
     
     //initialize reverb parameters
